@@ -19,6 +19,13 @@ local M = {}
 function M.setup(opts)
   local options = require("pack_ui.config").setup(opts)
   require("pack_ui.keymaps").register(options.keymaps)
+  -- Opt-in background automation. auto_update supersedes auto_check (it checks
+  -- too). Deferred so the fetch never sits on the startup critical path.
+  if options.auto_update then
+    vim.schedule(require("pack_ui.auto").update)
+  elseif options.auto_check then
+    vim.schedule(require("pack_ui.auto").check)
+  end
   return options
 end
 

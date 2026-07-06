@@ -14,6 +14,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - `:PackUpdateAll` — check and apply every available update automatically.
 - In-window keymaps for marking rows, applying updates, re-checking remotes, and viewing changelogs.
 - Optional global keymaps under a configurable prefix, discoverable via which-key.
+- `auto_check` — on `setup()`, check remotes in the background and notify if updates exist (off by default).
+- `auto_update` — on `setup()`, fetch and apply every available update automatically (off by default).
 - `setup()` for configuring border, title, window size, and keymaps.
+
+### Changed
+
+- Dropped the global `<leader>pu` (`:PackUpdate`) keymap: marking rows only makes sense inside the window, so the prefix binds just `s` (status) and `U` (update all). `:PackUpdate` is unchanged.
 
 [Unreleased]: https://github.com/jtprogru/pack-ui.nvim/commits/main

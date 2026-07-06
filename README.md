@@ -60,18 +60,30 @@ require("pack_ui").setup({
   max_width = 100,
   width_ratio = 0.9,
   height_ratio = 0.85,
+  auto_check = false,   -- on setup, check remotes and notify if updates exist
+  auto_update = false,  -- on setup, apply every available update automatically
   keymaps = {
     prefix = "<leader>p",
     status = "s",        -- <leader>ps -> :PackStatus
-    update = "u",        -- <leader>pu -> :PackUpdate
     update_all = "U",    -- <leader>pU -> :PackUpdateAll
   },
 })
 ```
 
+## Automatic checks & updates
+
+Both are **off by default** — nothing touches the network or changes plugins unless you opt in via `setup()`:
+
+- `auto_check = true` — on startup, fetch remotes in the background and notify you if any plugin has updates. No window opens and nothing is applied; run `:PackUpdate` when you want to review them.
+- `auto_update = true` — on startup, fetch and apply every available update automatically (a `:restart` loads the new code). This implies a check, so it supersedes `auto_check`.
+
+The work is deferred off the startup critical path, and the fetch itself runs asynchronously.
+
 ## Global keymaps & which-key
 
 Calling `setup()` registers the global keymaps above (nothing is mapped without it). Each carries a description, so if [which-key](https://github.com/folke/which-key.nvim) is installed they show up under a `pack-ui` group when you press the prefix — and the in-window keys (`<Space>`, `a`, `<CR>`, `U`, `r`, `K`, `q`) appear in which-key too, since they're documented buffer-local maps.
+
+There is deliberately no global keymap for `:PackUpdate`: marking rows only makes sense once the window is open, so `<leader>p` binds only `s` (status) and `U` (update all). Use `:PackUpdate` — or open with `<leader>ps` and mark rows there.
 
 Set an individual entry to `false` to skip it, or `keymaps = false` to register none:
 

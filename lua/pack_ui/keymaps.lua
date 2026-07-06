@@ -18,7 +18,6 @@ function M.register(km)
 
   local defs = {
     { km.status, ui.status, "pack-ui: status" },
-    { km.update, ui.update, "pack-ui: update (mark rows)" },
     { km.update_all, ui.update_all, "pack-ui: update all" },
   }
   for _, d in ipairs(defs) do
