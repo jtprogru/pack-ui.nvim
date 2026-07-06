@@ -30,7 +30,7 @@ Update *detection* (which plugins have new commits, and the changelog) is comput
 | `K` | Show changelog / details for the plugin under the cursor |
 | `q` / `<Esc>` | Close |
 
-Rows show a mark box, a status glyph, `●`/`○` (active in this session or not), the short revision, the tracked version/branch, and `↑ N new` when commits are pending.
+A column header row labels every field: a mark box, a status glyph, `●`/`○` (active in this session or not), the plugin name, the revision, and a trailing version/status column. Rows that have an update are grouped under an `── updates available ──` section at the top of the list (with the rest under `── up to date ──`) after a check, and each is shown in bold. An updatable row spells the change out as `current → latest` — a semver tag for version-tracked plugins (e.g. `v0.9.0 → v1.0.0`), a short sha otherwise — followed by the `N new` commit count.
 
 ## Install
 

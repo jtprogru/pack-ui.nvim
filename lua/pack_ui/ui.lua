@@ -304,8 +304,8 @@ function M.open(opts)
   end
 
   render.draw(state)
-  -- park cursor on the first plugin row
-  pcall(api.nvim_win_set_cursor, state.win, { 3, 0 })
+  -- park cursor on the first plugin row (past the header + column labels)
+  pcall(api.nvim_win_set_cursor, state.win, { state.first_row or 4, 0 })
 
   if opts.check then
     run_check(false, opts.on_checked)

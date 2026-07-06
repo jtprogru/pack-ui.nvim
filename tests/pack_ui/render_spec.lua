@@ -49,7 +49,7 @@ describe("render.draw", function()
     }
   end
 
-  it("renders a header and one row per plugin", function()
+  it("renders a header, a column row, and grouped sections", function()
     local state = make_state({
       { name = "alpha", status = "uptodate", rev = "1111111aaaa", version = nil, active = true, details = {} },
       {
@@ -57,6 +57,7 @@ describe("render.draw", function()
         status = "update",
         ahead = 2,
         head_sha = "2222222bbbb",
+        target_sha = "3333333cccc",
         version = "main",
         active = false,
         details = {},
@@ -67,13 +68,22 @@ describe("render.draw", function()
     local lines = vim.api.nvim_buf_get_lines(state.buf, 0, -1, false)
     assert.equals("  vim.pack — 2 plugins   ·   1 update available", lines[1])
     assert.equals("", lines[2])
-    assert.is_truthy(lines[3]:find("alpha", 1, true))
-    assert.is_truthy(lines[4]:find("beta", 1, true))
-    assert.is_truthy(lines[4]:find("↑ 2 new", 1, true))
+    -- Column headers name every field.
+    assert.is_truthy(lines[3]:find("Plugin", 1, true))
+    assert.is_truthy(lines[3]:find("Revision", 1, true))
+    -- Updatable plugins float to the top under their own section header.
+    assert.is_truthy(lines[4]:find("updates available", 1, true))
+    assert.is_truthy(lines[5]:find("beta", 1, true))
+    assert.is_truthy(lines[5]:find("2222222 → 3333333", 1, true))
+    assert.is_truthy(lines[5]:find("2 new", 1, true))
+    assert.is_truthy(lines[6]:find("up to date", 1, true))
+    assert.is_truthy(lines[7]:find("alpha", 1, true))
 
-    -- line_map maps buffer lines back to plugin indices.
-    assert.equals(1, state.line_map[3])
-    assert.equals(2, state.line_map[4])
+    -- line_map maps buffer lines back to plugin indices (beta=2, alpha=1).
+    assert.equals(2, state.line_map[5])
+    assert.equals(1, state.line_map[7])
+    -- first_row points at the first plugin row.
+    assert.equals(5, state.first_row)
   end)
 
   it("shows the marked count and a checked mark box", function()
@@ -92,7 +102,9 @@ describe("render.draw", function()
 
     local lines = vim.api.nvim_buf_get_lines(state.buf, 0, -1, false)
     assert.is_truthy(lines[1]:find("1 marked", 1, true))
-    assert.is_truthy(lines[3]:find("[x]", 1, true))
+    -- No updates -> no section headers; the single row sits right after columns.
+    assert.is_truthy(lines[4]:find("[x]", 1, true))
+    assert.equals(4, state.first_row)
   end)
 
   it("reports pending checks in the header", function()
