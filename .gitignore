@@ -1,0 +1,5 @@
+# Local test dependencies (plenary is cloned here by `make deps` / CI).
+/deps/
+
+# luacheck cache
+.luacheckcache
