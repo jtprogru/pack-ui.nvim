@@ -6,6 +6,7 @@ local api = vim.api
 local git = require("pack_ui.git")
 local render = require("pack_ui.render")
 local config = require("pack_ui.config")
+local cache = require("pack_ui.cache")
 
 local M = {}
 
@@ -47,6 +48,7 @@ local function run_check(offline, on_done)
   render.draw(state)
   if state.pending == 0 then
     state.checked = true
+    cache.store(state.plugins)
     render.draw(state)
     if on_done then
       on_done()
@@ -59,6 +61,9 @@ local function run_check(offline, on_done)
         state.pending = state.pending - 1
         if state.pending == 0 then
           state.checked = true
+          -- This live check is now the freshest snapshot; share it so a later
+          -- PackStatus reflects it too.
+          cache.store(state.plugins)
         end
         render.draw(state)
         if state.pending == 0 and on_done then
@@ -261,6 +266,13 @@ function M.open(opts)
   state.plugins = collect()
   state.checked = false
   state.pending = 0
+
+  -- No live check requested (PackStatus)? Reflect the last known check — e.g.
+  -- from a background auto_check — so already-detected updates show up without
+  -- a fresh network round-trip. A live check below (opts.check) supersedes this.
+  if not opts.check and cache.apply(state.plugins) then
+    state.checked = true
+  end
 
   if state.win and api.nvim_win_is_valid(state.win) then
     api.nvim_set_current_win(state.win)

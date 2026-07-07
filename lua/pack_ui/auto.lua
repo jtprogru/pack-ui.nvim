@@ -4,6 +4,7 @@
 -- vim.pack.update(names, { force = true }).
 
 local git = require("pack_ui.git")
+local cache = require("pack_ui.cache")
 
 local M = {}
 
@@ -24,25 +25,29 @@ local function collect()
 end
 
 -- Check every managed plugin for updates (fetches from remotes), then call
--- `on_done(names)` with the names that have updates pending, on the main loop.
+-- `on_done(names, plugins)` with the names that have updates pending and the
+-- full checked list, on the main loop. The results are cached so a later
+-- PackStatus can reflect them without a second network round-trip.
 local function check_all(on_done)
   local plugins = collect()
   local pending = #plugins
   if pending == 0 then
-    return on_done({})
+    cache.store(plugins)
+    return on_done({}, plugins)
   end
   for _, p in ipairs(plugins) do
     git.check(p, false, function()
       vim.schedule(function()
         pending = pending - 1
         if pending == 0 then
+          cache.store(plugins)
           local names = {}
           for _, q in ipairs(plugins) do
             if q.status == "update" then
               names[#names + 1] = q.name
             end
           end
-          on_done(names)
+          on_done(names, plugins)
         end
       end)
     end)
@@ -76,6 +81,8 @@ function M.update()
       vim.notify("vim.pack: " .. tostring(err), vim.log.levels.ERROR)
       return
     end
+    -- HEADs just moved on disk; the cached "update" statuses are now stale.
+    cache.clear()
     vim.notify(
       ("vim.pack: updated %d plugin%s — :restart to load new code"):format(#names, #names == 1 and "" or "s"),
       vim.log.levels.INFO
