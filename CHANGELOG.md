@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-07-07
+
+### Fixed
+
+- `:PackStatus` now reflects updates found by a background `auto_check`. The headless check and the windowed UI shared no state, so plugins with pending updates were left unhighlighted even after the "updates available" notification. An in-memory cache now bridges the two: the background check stores its results and `PackStatus` surfaces them on open, without a second network round-trip. A live re-check (`r` / `:PackUpdate`) still supersedes the cache.
+
 ## [0.1.0] - 2026-07-07
 
 ### Added
@@ -26,5 +32,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Updatable rows now show the update explicitly as `current → latest` — a semver tag for version-tracked plugins (e.g. `v0.9.0 → v1.0.0`), a short sha otherwise — alongside the new-commit count, and the whole row is rendered in bold so available updates stand out at a glance.
 - Dropped the global `<leader>pu` (`:PackUpdate`) keymap: marking rows only makes sense inside the window, so the prefix binds just `s` (status) and `U` (update all). `:PackUpdate` is unchanged.
 
-[Unreleased]: https://github.com/jtprogru/pack-ui.nvim/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/jtprogru/pack-ui.nvim/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/jtprogru/pack-ui.nvim/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/jtprogru/pack-ui.nvim/releases/tag/v0.1.0
