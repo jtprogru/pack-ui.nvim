@@ -3,3 +3,6 @@
 
 # luacheck cache
 .luacheckcache
+
+# MkDocs build output
+/site/

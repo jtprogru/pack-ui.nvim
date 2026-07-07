@@ -4,6 +4,8 @@ A floating-window UI for Neovim's built-in [`vim.pack`](https://neovim.io/doc/us
 
 One window shows the read-only state of every managed plugin and lets you apply updates **pointwise** (mark the rows you want, then `<CR>`) or **all at once** (`U`).
 
+📖 **Documentation:** <https://jtprogru.github.io/pack-ui.nvim/>
+
 ## Why
 
 `vim.pack` ships two update flows: `vim.pack.update()` opens a review buffer in a separate tabpage, and `vim.pack.update(nil, { force = true })` updates everything with no review. This plugin puts both — plus a status overview — behind a single, mark-driven floating window.
