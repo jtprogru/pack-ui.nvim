@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-07-07
+
 ### Added
 
 - Floating-window UI over Neovim's built-in `vim.pack` (Neovim 0.12+).
@@ -24,4 +26,5 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Updatable rows now show the update explicitly as `current → latest` — a semver tag for version-tracked plugins (e.g. `v0.9.0 → v1.0.0`), a short sha otherwise — alongside the new-commit count, and the whole row is rendered in bold so available updates stand out at a glance.
 - Dropped the global `<leader>pu` (`:PackUpdate`) keymap: marking rows only makes sense inside the window, so the prefix binds just `s` (status) and `U` (update all). `:PackUpdate` is unchanged.
 
-[Unreleased]: https://github.com/jtprogru/pack-ui.nvim/commits/main
+[Unreleased]: https://github.com/jtprogru/pack-ui.nvim/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/jtprogru/pack-ui.nvim/releases/tag/v0.1.0
