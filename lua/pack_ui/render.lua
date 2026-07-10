@@ -2,6 +2,7 @@
 -- of its own beyond the highlight namespace and static display tables.
 
 local api = vim.api
+local config = require("pack_ui.config")
 
 local M = {}
 
@@ -43,21 +44,35 @@ function M.ver_str(p)
 end
 
 -- Key hints live in the window bar so they stay pinned to the top of the
--- window and never scroll away with the plugin list.
+-- window and never scroll away with the plugin list. Each entry is an action
+-- from config.keymaps.window plus its label; the shown key is resolved from
+-- config at render time, so rebinding a key updates the hint too.
 local HINTS = {
-  { "<Space>", "mark" },
-  { "a", "all" },
-  { "⏎", "update" },
-  { "U", "update all" },
-  { "r", "refresh" },
-  { "K", "log" },
-  { "q", "quit" },
+  { "toggle_mark", "mark" },
+  { "mark_all", "all" },
+  { "update_marked", "update" },
+  { "update_all", "update all" },
+  { "refresh", "refresh" },
+  { "changelog", "log" },
+  { "close", "quit" },
 }
 
+-- Display the first bound key for an action, prettifying the noisy `<...>`
+-- notations that read poorly in a compact bar.
+local KEY_LABEL = { ["<CR>"] = "⏎" }
+
 function M.winbar()
+  local win = config.window_keymaps()
   local parts = {}
   for _, h in ipairs(HINTS) do
-    parts[#parts + 1] = ("%%#Title#%s %%#Comment#%s"):format(h[1], h[2])
+    local spec = win[h[1]]
+    if spec ~= nil and spec ~= false then
+      local first = type(spec) == "table" and spec[1] or spec
+      if first ~= nil then
+        local key = KEY_LABEL[first] or first
+        parts[#parts + 1] = ("%%#Title#%s %%#Comment#%s"):format(key, h[2])
+      end
+    end
   end
   return "%#Comment# " .. table.concat(parts, "   ")
 end

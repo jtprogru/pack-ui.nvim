@@ -14,11 +14,13 @@
 | --- | --- |
 | `<Space>` / `<Tab>` | Toggle the mark on the current row |
 | `a` | Mark / unmark all |
-| `<CR>` / `u` | Update marked rows (or the row under the cursor) |
+| `u` | Update marked rows (or the row under the cursor) |
 | `U` | Update all rows with available updates |
 | `r` | Re-check remotes |
-| `K` | Show changelog / details for the plugin under the cursor |
+| `<CR>` / `K` | Show changelog / details for the plugin under the cursor |
 | `q` / `<Esc>` | Close |
+
+Every key here is configurable via `keymaps.window` — see [Configuration → Keymaps](configuration.md#keymaps).
 
 ## Reading the list
 

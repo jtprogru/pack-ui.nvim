@@ -227,23 +227,29 @@ local function close()
 end
 
 local function set_keymaps()
-  -- desc feeds which-key, so the in-window keys are documented the moment the
-  -- float opens (which-key reads buffer-local maps).
-  local map = function(keys, fn, desc)
+  -- Keys come from config.keymaps.window so users can rebind them; desc feeds
+  -- which-key, so the in-window keys are documented the moment the float opens
+  -- (which-key reads buffer-local maps).
+  local win = config.window_keymaps()
+  local map = function(spec, fn, desc)
+    if spec == nil or spec == false then
+      return
+    end
+    local keys = type(spec) == "table" and spec or { spec }
     for _, key in ipairs(keys) do
       vim.keymap.set("n", key, fn, { buffer = state.buf, nowait = true, silent = true, desc = desc })
     end
   end
-  map({ "q", "<Esc>" }, close, "pack-ui: close")
-  map({ "<Space>", "<Tab>" }, toggle_mark, "pack-ui: toggle mark")
-  map({ "a" }, mark_all, "pack-ui: mark/unmark all")
-  map({ "<CR>", "u" }, update_marked, "pack-ui: update marked (or row under cursor)")
-  map({ "U" }, update_all, "pack-ui: update all")
-  map({ "r", "R" }, function()
+  map(win.close, close, "pack-ui: close")
+  map(win.toggle_mark, toggle_mark, "pack-ui: toggle mark")
+  map(win.mark_all, mark_all, "pack-ui: mark/unmark all")
+  map(win.update_marked, update_marked, "pack-ui: update marked (or row under cursor)")
+  map(win.update_all, update_all, "pack-ui: update all")
+  map(win.refresh, function()
     state.plugins = collect()
     run_check(false)
   end, "pack-ui: re-check remotes")
-  map({ "K" }, show_changelog, "pack-ui: changelog / details")
+  map(win.changelog, show_changelog, "pack-ui: changelog / details")
 
   -- Plain vertical motion. Global j→gj / k→gk expr maps (and a global
   -- treesitter foldexpr) can defer this float's redraw and make scrolling look

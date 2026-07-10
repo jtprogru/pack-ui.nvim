@@ -1,7 +1,7 @@
 -- pack_ui — a floating-window UI for Neovim's built-in vim.pack.
 --
 -- One window shows the read-only state of every managed plugin and lets you
--- apply updates pointwise (mark rows, then <CR>) or all at once (U). See
+-- apply updates pointwise (mark rows, then u) or all at once (U). See
 -- README.md for keymaps and behaviour.
 --
 -- Public API:

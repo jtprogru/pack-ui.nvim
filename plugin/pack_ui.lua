@@ -19,7 +19,7 @@ end, { desc = "vim.pack: floating status window (press r to check updates)" })
 
 command("PackUpdate", function()
   require("pack_ui").update()
-end, { desc = "vim.pack: floating update UI (mark rows, <CR> to apply)" })
+end, { desc = "vim.pack: floating update UI (mark rows, u to apply)" })
 
 command("PackUpdateAll", function()
   require("pack_ui").update_all()

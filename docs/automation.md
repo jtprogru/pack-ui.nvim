@@ -18,6 +18,6 @@ require("pack_ui").setup({
 
 ## Global keymaps & which-key
 
-Calling `setup()` registers the global keymaps (nothing is mapped without it). Each carries a description, so if [which-key](https://github.com/folke/which-key.nvim) is installed they show up under a `pack-ui` group when you press the prefix — and the in-window keys (`<Space>`, `a`, `<CR>`, `U`, `r`, `K`, `q`) appear in which-key too, since they're documented buffer-local maps.
+Calling `setup()` registers the global keymaps (nothing is mapped without it). Each carries a description, so if [which-key](https://github.com/folke/which-key.nvim) is installed they show up under a `pack-ui` group when you press the prefix — and the in-window keys (`<Space>`, `a`, `u`, `U`, `r`, `<CR>`, `K`, `q`) appear in which-key too, since they're documented buffer-local maps.
 
 There is deliberately no global keymap for `:PackUpdate`: marking rows only makes sense once the window is open, so `<leader>p` binds only `s` (status) and `U` (update all). Use `:PackUpdate` — or open with `<leader>ps` and mark rows there.

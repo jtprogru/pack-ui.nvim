@@ -2,7 +2,7 @@
 
 A floating-window UI for Neovim's built-in [`vim.pack`](https://neovim.io/doc/user/pack.html) plugin manager (Neovim 0.12+).
 
-One window shows the read-only state of every managed plugin and lets you apply updates **pointwise** (mark the rows you want, then `<CR>`) or **all at once** (`U`).
+One window shows the read-only state of every managed plugin and lets you apply updates **pointwise** (mark the rows you want, then `u`) or **all at once** (`U`).
 
 ## Why
 

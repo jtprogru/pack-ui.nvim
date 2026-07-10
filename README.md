@@ -2,7 +2,7 @@
 
 A floating-window UI for Neovim's built-in [`vim.pack`](https://neovim.io/doc/user/pack.html) plugin manager (Neovim 0.12+).
 
-One window shows the read-only state of every managed plugin and lets you apply updates **pointwise** (mark the rows you want, then `<CR>`) or **all at once** (`U`).
+One window shows the read-only state of every managed plugin and lets you apply updates **pointwise** (mark the rows you want, then `u`) or **all at once** (`U`).
 
 📖 **Documentation:** <https://jtprogru.github.io/pack-ui.nvim/>
 
@@ -26,11 +26,13 @@ Update *detection* (which plugins have new commits, and the changelog) is comput
 | --- | --- |
 | `<Space>` / `<Tab>` | Toggle the mark on the current row |
 | `a` | Mark / unmark all |
-| `<CR>` / `u` | Update marked rows (or the row under the cursor) |
+| `u` | Update marked rows (or the row under the cursor) |
 | `U` | Update all rows with available updates |
 | `r` | Re-check remotes |
-| `K` | Show changelog / details for the plugin under the cursor |
+| `<CR>` / `K` | Show changelog / details for the plugin under the cursor |
 | `q` / `<Esc>` | Close |
+
+Every in-window key is configurable via `keymaps.window` — see [Configuration](#configuration).
 
 A column header row labels every field: a mark box, a status glyph, `●`/`○` (active in this session or not), the plugin name, the revision, and a trailing version/status column. Rows that have an update are grouped under an `── updates available ──` section at the top of the list (with the rest under `── up to date ──`) after a check, and each is shown in bold. An updatable row spells the change out as `current → latest` — a semver tag for version-tracked plugins (e.g. `v0.9.0 → v1.0.0`), a short sha otherwise — followed by the `N new` commit count.
 
@@ -68,6 +70,18 @@ require("pack_ui").setup({
     prefix = "<leader>p",
     status = "s",        -- <leader>ps -> :PackStatus
     update_all = "U",    -- <leader>pU -> :PackUpdateAll
+    -- Buffer-local keys inside the float. Each takes a string or a list of
+    -- keys; set one to `false` to unbind it. These stay active even with
+    -- `keymaps = false` (that only turns off the global maps above).
+    window = {
+      close = { "q", "<Esc>" },
+      toggle_mark = { "<Space>", "<Tab>" },
+      mark_all = { "a" },
+      update_marked = { "u" },
+      update_all = { "U" },
+      refresh = { "r", "R" },
+      changelog = { "<CR>", "K" },
+    },
   },
 })
 ```
@@ -83,7 +97,7 @@ The work is deferred off the startup critical path, and the fetch itself runs as
 
 ## Global keymaps & which-key
 
-Calling `setup()` registers the global keymaps above (nothing is mapped without it). Each carries a description, so if [which-key](https://github.com/folke/which-key.nvim) is installed they show up under a `pack-ui` group when you press the prefix — and the in-window keys (`<Space>`, `a`, `<CR>`, `U`, `r`, `K`, `q`) appear in which-key too, since they're documented buffer-local maps.
+Calling `setup()` registers the global keymaps above (nothing is mapped without it). Each carries a description, so if [which-key](https://github.com/folke/which-key.nvim) is installed they show up under a `pack-ui` group when you press the prefix — and the in-window keys (`<Space>`, `a`, `u`, `U`, `r`, `<CR>`, `K`, `q`) appear in which-key too, since they're documented buffer-local maps.
 
 There is deliberately no global keymap for `:PackUpdate`: marking rows only makes sense once the window is open, so `<leader>p` binds only `s` (status) and `U` (update all). Use `:PackUpdate` — or open with `<leader>ps` and mark rows there.
 

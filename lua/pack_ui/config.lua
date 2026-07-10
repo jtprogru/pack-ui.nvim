@@ -17,22 +17,57 @@ M.defaults = {
   --                  automatically. Implies a check; supersedes `auto_check`.
   auto_check = false,
   auto_update = false,
-  -- Global keymaps registered by `setup()`. Each entry is a suffix appended to
-  -- `prefix`; set a suffix to `false` to skip it, or `keymaps = false` to skip
-  -- them all. They carry `desc`s, so which-key (if installed) shows them under
-  -- a "pack-ui" group. Nothing is mapped unless `setup()` is called.
+  -- Keymaps. Two independent groups:
+  --  * `prefix`/`status`/`update_all` -> the optional *global* launcher maps
+  --    registered by `setup()`. Each is a suffix appended to `prefix`; set a
+  --    suffix to `false` to skip it, or `keymaps = false` to skip them all.
+  --    They carry `desc`s, so which-key (if installed) shows them under a
+  --    "pack-ui" group. Nothing is mapped unless `setup()` is called.
+  --  * `window` -> the buffer-local keys active *inside* the pack-ui float.
+  --    Each action takes a key string or a list of them; set one to `false`
+  --    to unbind it. These stay active even with `keymaps = false` (that only
+  --    disables the global launcher maps) so the window is always operable.
   keymaps = {
     prefix = "<leader>p",
     status = "s", -- <leader>ps -> :PackStatus
     update_all = "U", -- <leader>pU -> :PackUpdateAll
+    window = {
+      close = { "q", "<Esc>" },
+      toggle_mark = { "<Space>", "<Tab>" },
+      mark_all = { "a" },
+      update_marked = { "u" }, -- update marked rows (or the row under the cursor)
+      update_all = { "U" },
+      refresh = { "r", "R" },
+      changelog = { "<CR>", "K" }, -- details / changelog for the row under the cursor
+    },
   },
 }
 
 M.options = vim.deepcopy(M.defaults)
 
 function M.setup(opts)
-  M.options = vim.tbl_deep_extend("force", M.defaults, opts or {})
+  opts = opts or {}
+  M.options = vim.tbl_deep_extend("force", M.defaults, opts)
+  -- `window` holds list-valued actions, which `tbl_deep_extend` merges by index
+  -- (overriding `{ "q", "<Esc>" }` with `{ "gq" }` would leave `<Esc>` behind).
+  -- Re-apply the user's window overrides per action so each one replaces its
+  -- default wholesale.
+  local user_window = type(opts.keymaps) == "table" and opts.keymaps.window or nil
+  if user_window then
+    local win = vim.deepcopy(M.defaults.keymaps.window)
+    for action, keys in pairs(user_window) do
+      win[action] = keys
+    end
+    M.options.keymaps.window = win
+  end
   return M.options
+end
+
+-- The buffer-local window keymaps, resilient to `keymaps = false` (which only
+-- turns off the global launcher maps): falls back to the window defaults.
+function M.window_keymaps()
+  local km = M.options.keymaps
+  return (type(km) == "table" and km.window) or M.defaults.keymaps.window
 end
 
 return M

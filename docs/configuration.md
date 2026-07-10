@@ -17,6 +17,15 @@ require("pack_ui").setup({
     prefix = "<leader>p",
     status = "s",        -- <leader>ps -> :PackStatus
     update_all = "U",    -- <leader>pU -> :PackUpdateAll
+    window = {
+      close = { "q", "<Esc>" },
+      toggle_mark = { "<Space>", "<Tab>" },
+      mark_all = { "a" },
+      update_marked = { "u" },
+      update_all = { "U" },
+      refresh = { "r", "R" },
+      changelog = { "<CR>", "K" },
+    },
   },
 })
 ```
@@ -32,11 +41,15 @@ require("pack_ui").setup({
 | `height_ratio` | `0.85` | Window height as a ratio of the editor grid. |
 | `auto_check` | `false` | On `setup()`, check remotes in the background and notify if updates exist. See [Automation](automation.md). |
 | `auto_update` | `false` | On `setup()`, fetch and apply every available update automatically. See [Automation](automation.md). |
-| `keymaps` | see below | Global keymaps registered by `setup()`, or `false` to register none. |
+| `keymaps` | see below | Global launcher keymaps + the in-window `window` keys. `keymaps = false` registers no global maps (the window keys stay). |
 
 ## Keymaps
 
-Each `keymaps` entry is a suffix appended to `prefix`. Set a suffix to `false` to skip it, or `keymaps = false` to skip them all:
+`keymaps` covers two independent groups.
+
+### Global launcher keys
+
+`prefix`, `status`, and `update_all` register optional global maps when `setup()` is called. Each is a suffix appended to `prefix`; set a suffix to `false` to skip it, or `keymaps = false` to skip them all:
 
 ```lua
 require("pack_ui").setup({
@@ -45,6 +58,31 @@ require("pack_ui").setup({
 ```
 
 See [Automation → Global keymaps & which-key](automation.md#global-keymaps-which-key) for how these surface in which-key.
+
+### In-window keys (`keymaps.window`)
+
+The buffer-local keys active *inside* the float. Each action takes a key string or a list of keys; set one to `false` to unbind it. These stay active even with `keymaps = false` — that only turns off the global launcher maps. The winbar hints follow whatever you bind here.
+
+```lua
+require("pack_ui").setup({
+  keymaps = {
+    window = {
+      update_marked = "gu",   -- rebind update to `gu`
+      changelog = false,      -- unbind the details/changelog key
+    },
+  },
+})
+```
+
+| Action | Default | Description |
+| --- | --- | --- |
+| `close` | `{ "q", "<Esc>" }` | Close the window. |
+| `toggle_mark` | `{ "<Space>", "<Tab>" }` | Toggle the mark on the current row. |
+| `mark_all` | `{ "a" }` | Mark / unmark all rows. |
+| `update_marked` | `{ "u" }` | Update marked rows (or the row under the cursor). |
+| `update_all` | `{ "U" }` | Update all rows with available updates. |
+| `refresh` | `{ "r", "R" }` | Re-check remotes. |
+| `changelog` | `{ "<CR>", "K" }` | Show changelog / details for the plugin under the cursor. |
 
 ## Custom commands
 

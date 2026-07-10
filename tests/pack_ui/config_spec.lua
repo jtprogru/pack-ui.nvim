@@ -45,4 +45,35 @@ describe("config.setup", function()
     config.setup({ title = " packages " })
     assert.equals(" packages ", config.options.title)
   end)
+
+  it("defaults the in-window keymaps", function()
+    local opts = config.setup()
+    assert.same({ "u" }, opts.keymaps.window.update_marked)
+    assert.same({ "U" }, opts.keymaps.window.update_all)
+    assert.same({ "<CR>", "K" }, opts.keymaps.window.changelog)
+  end)
+
+  it("replaces a window action wholesale, without index-merge leftovers", function()
+    -- The default is { "<CR>", "K" }; overriding with a shorter list must not
+    -- leave "K" behind (the vim.tbl_deep_extend list-merge footgun).
+    local opts = config.setup({ keymaps = { window = { changelog = { "gc" } } } })
+    assert.same({ "gc" }, opts.keymaps.window.changelog)
+    -- Sibling window actions keep their defaults.
+    assert.same({ "u" }, opts.keymaps.window.update_marked)
+  end)
+
+  it("accepts a string or false for a window action", function()
+    local opts = config.setup({
+      keymaps = { window = { update_marked = "gu", changelog = false } },
+    })
+    assert.equals("gu", opts.keymaps.window.update_marked)
+    assert.equals(false, opts.keymaps.window.changelog)
+  end)
+
+  it("keeps the window keymaps when keymaps = false disables the global maps", function()
+    config.setup({ keymaps = false })
+    assert.equals(false, config.options.keymaps)
+    -- The window stays operable: window_keymaps falls back to the defaults.
+    assert.same({ "u" }, config.window_keymaps().update_marked)
+  end)
 end)
