@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.1.2] - 2026-07-10
+
+### Added
+
+- Configurable in-window keymaps via `keymaps.window`. Every action inside the float — `close`, `toggle_mark`, `mark_all`, `update_marked`, `update_all`, `refresh`, `changelog` — takes a key string or a list of keys, or `false` to unbind it. The window keys stay active even with `keymaps = false` (that only turns off the optional global launcher maps), and the winbar hints now resolve their key from config, so a rebind or unbind is reflected on screen.
+
+### Changed
+
+- `<CR>` no longer applies updates. In a list view Enter reads as "open / drill into details", not as a mutating network action, so triggering an update on Enter was surprising and invited accidental updates. Enter now shows the changelog / details for the row under the cursor (`K` remains an alias). The update keys are unchanged: `u` updates the marked rows (or the row under the cursor) and `U` updates all.
+
 ## [0.1.1] - 2026-07-07
 
 ### Fixed
@@ -32,6 +42,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Updatable rows now show the update explicitly as `current → latest` — a semver tag for version-tracked plugins (e.g. `v0.9.0 → v1.0.0`), a short sha otherwise — alongside the new-commit count, and the whole row is rendered in bold so available updates stand out at a glance.
 - Dropped the global `<leader>pu` (`:PackUpdate`) keymap: marking rows only makes sense inside the window, so the prefix binds just `s` (status) and `U` (update all). `:PackUpdate` is unchanged.
 
-[Unreleased]: https://github.com/jtprogru/pack-ui.nvim/compare/v0.1.1...HEAD
+[Unreleased]: https://github.com/jtprogru/pack-ui.nvim/compare/v0.1.2...HEAD
+[0.1.2]: https://github.com/jtprogru/pack-ui.nvim/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/jtprogru/pack-ui.nvim/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/jtprogru/pack-ui.nvim/releases/tag/v0.1.0
