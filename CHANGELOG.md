@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.1.3] - 2026-07-14
+
+### Added
+
+- Configurable float stacking order via a `zindex` option, passed to both the main `PackStatus` window and the changelog float. The default is `50` — Neovim's own default for floating windows — so existing behavior is unchanged. GUI clients such as Neovide could draw the float in front of every other window; lowering it (e.g. `setup({ zindex = 1 })`) pushes it back. Thanks to @I-Own-You for the diagnosis (#1).
+
 ## [0.1.2] - 2026-07-10
 
 ### Added
@@ -42,7 +48,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Updatable rows now show the update explicitly as `current → latest` — a semver tag for version-tracked plugins (e.g. `v0.9.0 → v1.0.0`), a short sha otherwise — alongside the new-commit count, and the whole row is rendered in bold so available updates stand out at a glance.
 - Dropped the global `<leader>pu` (`:PackUpdate`) keymap: marking rows only makes sense inside the window, so the prefix binds just `s` (status) and `U` (update all). `:PackUpdate` is unchanged.
 
-[Unreleased]: https://github.com/jtprogru/pack-ui.nvim/compare/v0.1.2...HEAD
+[Unreleased]: https://github.com/jtprogru/pack-ui.nvim/compare/v0.1.3...HEAD
+[0.1.3]: https://github.com/jtprogru/pack-ui.nvim/compare/v0.1.2...v0.1.3
 [0.1.2]: https://github.com/jtprogru/pack-ui.nvim/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/jtprogru/pack-ui.nvim/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/jtprogru/pack-ui.nvim/releases/tag/v0.1.0
