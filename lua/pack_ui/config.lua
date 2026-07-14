@@ -9,6 +9,10 @@ M.defaults = {
   max_width = 100,
   width_ratio = 0.9,
   height_ratio = 0.85,
+  -- Stacking order of the float, passed straight to `nvim_open_win`. 50 is
+  -- Neovim's default for floats; lower it (e.g. 1) if a GUI like Neovide draws
+  -- the window in front of everything else. See issue #1.
+  zindex = 50,
   -- Background automation, run from `setup()`. Both are off by default: nothing
   -- touches the network or updates plugins unless you opt in.
   --   auto_check  -> on setup, fetch remotes in the background and notify if any

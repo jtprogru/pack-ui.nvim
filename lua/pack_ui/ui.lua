@@ -210,6 +210,7 @@ local function show_changelog()
     border = config.options.border,
     title = " changelog ",
     title_pos = "center",
+    zindex = config.options.zindex,
   })
   vim.wo[win].wrap = false
   for _, key in ipairs({ "q", "<Esc>", "<CR>" }) do
@@ -301,6 +302,7 @@ function M.open(opts)
       border = o.border,
       title = o.title,
       title_pos = "center",
+      zindex = o.zindex,
     })
     vim.wo[state.win].cursorline = true
     vim.wo[state.win].wrap = false

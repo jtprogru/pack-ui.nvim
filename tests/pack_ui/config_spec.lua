@@ -21,6 +21,11 @@ describe("config.setup", function()
     assert.equals(0.9, opts.width_ratio)
   end)
 
+  it("defaults zindex to Neovim's float default and lets users override it", function()
+    assert.equals(50, config.setup().zindex)
+    assert.equals(1, config.setup({ zindex = 1 }).zindex)
+  end)
+
   it("defaults auto_check and auto_update to off", function()
     local opts = config.setup()
     assert.equals(false, opts.auto_check)
