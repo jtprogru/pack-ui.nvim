@@ -120,16 +120,16 @@ local function remove(names)
     return
   end
   vim.schedule(function()
-    -- local ok, err = pcall(vim.pack.del, names, { force = true })
-    -- if not ok then
-    --   vim.notify("vim.pack: " .. tostring(err), vim.log.levels.ERROR)
-    -- end
+    local ok, err = pcall(vim.pack.del, names, { force = true })
+    if not ok then
+      vim.notify("vim.pack: " .. tostring(err), vim.log.levels.ERROR)
+    end
     -- for _, p in ipairs(state.plugins) do
     --   p.selected = false
     -- end
     -- Revs changed on disk; recompute from already-fetched refs (offline).
-    -- state.plugins = collect()
-    -- run_check(true)
+    state.plugins = collect()
+    run_check(true)
     vim.notify(
       ("vim.pack: removed %d plugin%s — :restart to apply to current buffer"):format(
         #names,
