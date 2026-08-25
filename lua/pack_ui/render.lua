@@ -52,6 +52,7 @@ local HINTS = {
   { "mark_all", "all" },
   { "update_marked", "update" },
   { "update_all", "update all" },
+  { "remove_marked", "remove" },
   { "refresh", "refresh" },
   { "changelog", "log" },
   { "close", "quit" },

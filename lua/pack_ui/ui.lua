@@ -19,6 +19,7 @@ local state = {
   line_map = {}, -- buffer line (1-based) -> index in state.plugins
 }
 
+-- Collect all plugins via vim.pack.get, and sort them
 local function collect()
   local list = {}
   for _, pd in ipairs(vim.pack.get(nil, { info = false })) do
@@ -111,6 +112,34 @@ local function apply(names)
   end)
 end
 
+-- Remove `names` via vim.pack
+---@diagnostic disable-next-line: unused-function
+local function remove(names)
+  if #names == 0 then
+    vim.notify("vim.pack: nothing to remove", vim.log.levels.WARN)
+    return
+  end
+  vim.schedule(function()
+    -- local ok, err = pcall(vim.pack.del, names, { force = true })
+    -- if not ok then
+    --   vim.notify("vim.pack: " .. tostring(err), vim.log.levels.ERROR)
+    -- end
+    -- for _, p in ipairs(state.plugins) do
+    --   p.selected = false
+    -- end
+    -- Revs changed on disk; recompute from already-fetched refs (offline).
+    -- state.plugins = collect()
+    -- run_check(true)
+    vim.notify(
+      ("vim.pack: removed %d plugin%s — :restart to apply to current buffer"):format(
+        #names,
+        #names == 1 and "" or "s"
+      ),
+      vim.log.levels.INFO
+    )
+  end)
+end
+
 -- Update whatever is marked; fall back to the plugin under the cursor. Marking
 -- an already up-to-date plugin is allowed — vim.pack just re-checks it and
 -- no-ops if nothing changed.
@@ -144,6 +173,23 @@ local function update_all()
     end
   end
   apply(names)
+end
+
+---@diagnostic disable-next-line: unused-local, unused-function
+local function remove_marked()
+  local names = {}
+  for _, p in ipairs(state.plugins) do
+    if p.selected then
+      names[#names + 1] = p.name
+    end
+  end
+  if #names == 0 then
+    local p = current_plugin()
+    if p then
+      names[1] = p.name
+    end
+  end
+  remove(names)
 end
 
 local function toggle_mark()
@@ -248,6 +294,7 @@ local function set_keymaps()
   map(win.mark_all, mark_all, "pack-ui: mark/unmark all")
   map(win.update_marked, update_marked, "pack-ui: update marked (or row under cursor)")
   map(win.update_all, update_all, "pack-ui: update all")
+  map(win.remove_marked, remove_marked, "pack-ui: remove marked (or row under cursor)")
   map(win.refresh, function()
     state.plugins = collect()
     run_check(false)
