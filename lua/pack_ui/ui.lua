@@ -93,15 +93,17 @@ local function apply(names)
   end
   vim.schedule(function()
     local ok, err = pcall(vim.pack.update, names, { force = true })
-    if not ok then
-      vim.notify("vim.pack: " .. tostring(err), vim.log.levels.ERROR)
-    end
     for _, p in ipairs(state.plugins) do
       p.selected = false
     end
-    -- Revs changed on disk; recompute from already-fetched refs (offline).
+    -- Revs may have changed on disk even if the update failed part-way;
+    -- recompute from already-fetched refs (offline).
     state.plugins = collect()
     run_check(true)
+    if not ok then
+      vim.notify("vim.pack: " .. tostring(err), vim.log.levels.ERROR)
+      return
+    end
     vim.notify(
       ("vim.pack: updated %d plugin%s — :restart to load new code"):format(#names, #names == 1 and "" or "s"),
       vim.log.levels.INFO
