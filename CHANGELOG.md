@@ -6,6 +6,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-10-26
+
+### Changed
+
+- The in-window keys moved to a top-level `window_keymaps` option. `keymaps` now holds only the optional global launcher maps (`prefix`, `status`, `update_all`), so the two groups are configured independently and `keymaps = false` no longer reads as if it touched the window. Actions and defaults are unchanged; when both locations are set, `window_keymaps` wins per action. Thanks to @ABDsheikho for the feedback (#3).
+
+### Deprecated
+
+- `keymaps.window`. It is still applied, with a one-time `vim.deprecate()` warning, and will be removed in 0.3.0 — move the table to `window_keymaps`.
+
+### Fixed
+
+- A failed update is no longer reported as a successful one. If `vim.pack.update` throws, pack-ui now shows only the error instead of the error followed by "updated N plugins".
+
 ## [0.1.3] - 2026-07-14
 
 ### Added
@@ -48,7 +62,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Updatable rows now show the update explicitly as `current → latest` — a semver tag for version-tracked plugins (e.g. `v0.9.0 → v1.0.0`), a short sha otherwise — alongside the new-commit count, and the whole row is rendered in bold so available updates stand out at a glance.
 - Dropped the global `<leader>pu` (`:PackUpdate`) keymap: marking rows only makes sense inside the window, so the prefix binds just `s` (status) and `U` (update all). `:PackUpdate` is unchanged.
 
-[Unreleased]: https://github.com/jtprogru/pack-ui.nvim/compare/v0.1.3...HEAD
+[Unreleased]: https://github.com/jtprogru/pack-ui.nvim/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/jtprogru/pack-ui.nvim/compare/v0.1.3...v0.2.0
 [0.1.3]: https://github.com/jtprogru/pack-ui.nvim/compare/v0.1.2...v0.1.3
 [0.1.2]: https://github.com/jtprogru/pack-ui.nvim/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/jtprogru/pack-ui.nvim/compare/v0.1.0...v0.1.1
