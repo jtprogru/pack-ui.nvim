@@ -20,7 +20,7 @@
 | `<CR>` / `K` | Show changelog / details for the plugin under the cursor |
 | `q` / `<Esc>` | Close |
 
-Every key here is configurable via `keymaps.window` — see [Configuration → Keymaps](configuration.md#keymaps).
+Every key here is configurable via `window_keymaps` — see [Configuration → Keymaps](configuration.md#keymaps).
 
 ## Reading the list
 

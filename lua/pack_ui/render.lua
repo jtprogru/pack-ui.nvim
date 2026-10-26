@@ -45,7 +45,7 @@ end
 
 -- Key hints live in the window bar so they stay pinned to the top of the
 -- window and never scroll away with the plugin list. Each entry is an action
--- from config.keymaps.window plus its label; the shown key is resolved from
+-- from config.window_keymaps plus its label; the shown key is resolved from
 -- config at render time, so rebinding a key updates the hint too.
 local HINTS = {
   { "toggle_mark", "mark" },
