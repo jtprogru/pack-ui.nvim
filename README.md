@@ -32,7 +32,7 @@ Update *detection* (which plugins have new commits, and the changelog) is comput
 | `<CR>` / `K` | Show changelog / details for the plugin under the cursor |
 | `q` / `<Esc>` | Close |
 
-Every in-window key is configurable via `keymaps.window` — see [Configuration](#configuration).
+Every in-window key is configurable via `window_keymaps` — see [Configuration](#configuration).
 
 A column header row labels every field: a mark box, a status glyph, `●`/`○` (active in this session or not), the plugin name, the revision, and a trailing version/status column. Rows that have an update are grouped under an `── updates available ──` section at the top of the list (with the rest under `── up to date ──`) after a check, and each is shown in bold. An updatable row spells the change out as `current → latest` — a semver tag for version-tracked plugins (e.g. `v0.9.0 → v1.0.0`), a short sha otherwise — followed by the `N new` commit count.
 
@@ -71,21 +71,23 @@ require("pack_ui").setup({
     prefix = "<leader>p",
     status = "s",        -- <leader>ps -> :PackStatus
     update_all = "U",    -- <leader>pU -> :PackUpdateAll
-    -- Buffer-local keys inside the float. Each takes a string or a list of
-    -- keys; set one to `false` to unbind it. These stay active even with
-    -- `keymaps = false` (that only turns off the global maps above).
-    window = {
-      close = { "q", "<Esc>" },
-      toggle_mark = { "<Space>", "<Tab>" },
-      mark_all = { "a" },
-      update_marked = { "u" },
-      update_all = { "U" },
-      refresh = { "r", "R" },
-      changelog = { "<CR>", "K" },
-    },
+  },
+  -- Buffer-local keys inside the float. Each takes a string or a list of
+  -- keys; set one to `false` to unbind it. Independent of `keymaps`:
+  -- `keymaps = false` only turns off the global maps above.
+  window_keymaps = {
+    close = { "q", "<Esc>" },
+    toggle_mark = { "<Space>", "<Tab>" },
+    mark_all = { "a" },
+    update_marked = { "u" },
+    update_all = { "U" },
+    refresh = { "r", "R" },
+    changelog = { "<CR>", "K" },
   },
 })
 ```
+
+Before 0.2.0 the in-window keys lived under `keymaps.window`. That still works until 0.3.0, with a deprecation warning; when both are set, `window_keymaps` wins per action.
 
 ## Automatic checks & updates
 

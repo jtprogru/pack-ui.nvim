@@ -17,15 +17,15 @@ require("pack_ui").setup({
     prefix = "<leader>p",
     status = "s",        -- <leader>ps -> :PackStatus
     update_all = "U",    -- <leader>pU -> :PackUpdateAll
-    window = {
-      close = { "q", "<Esc>" },
-      toggle_mark = { "<Space>", "<Tab>" },
-      mark_all = { "a" },
-      update_marked = { "u" },
-      update_all = { "U" },
-      refresh = { "r", "R" },
-      changelog = { "<CR>", "K" },
-    },
+  },
+  window_keymaps = {
+    close = { "q", "<Esc>" },
+    toggle_mark = { "<Space>", "<Tab>" },
+    mark_all = { "a" },
+    update_marked = { "u" },
+    update_all = { "U" },
+    refresh = { "r", "R" },
+    changelog = { "<CR>", "K" },
   },
 })
 ```
@@ -41,13 +41,14 @@ require("pack_ui").setup({
 | `height_ratio` | `0.85` | Window height as a ratio of the editor grid. |
 | `auto_check` | `false` | On `setup()`, check remotes in the background and notify if updates exist. See [Automation](automation.md). |
 | `auto_update` | `false` | On `setup()`, fetch and apply every available update automatically. See [Automation](automation.md). |
-| `keymaps` | see below | Global launcher keymaps + the in-window `window` keys. `keymaps = false` registers no global maps (the window keys stay). |
+| `keymaps` | see below | Global launcher keymaps. `keymaps = false` registers none. |
+| `window_keymaps` | see below | Buffer-local keys inside the float. Independent of `keymaps`. |
 
 ## Keymaps
 
-`keymaps` covers two independent groups.
+Keys come in two independent groups, each with its own option.
 
-### Global launcher keys
+### Global launcher keys (`keymaps`)
 
 `prefix`, `status`, and `update_all` register optional global maps when `setup()` is called. Each is a suffix appended to `prefix`; set a suffix to `false` to skip it, or `keymaps = false` to skip them all:
 
@@ -59,20 +60,20 @@ require("pack_ui").setup({
 
 See [Automation → Global keymaps & which-key](automation.md#global-keymaps-which-key) for how these surface in which-key.
 
-### In-window keys (`keymaps.window`)
+### In-window keys (`window_keymaps`)
 
 The buffer-local keys active *inside* the float. Each action takes a key string or a list of keys; set one to `false` to unbind it. These stay active even with `keymaps = false` — that only turns off the global launcher maps. The winbar hints follow whatever you bind here.
 
 ```lua
 require("pack_ui").setup({
-  keymaps = {
-    window = {
-      update_marked = "gu",   -- rebind update to `gu`
-      changelog = false,      -- unbind the details/changelog key
-    },
+  window_keymaps = {
+    update_marked = "gu",   -- rebind update to `gu`
+    changelog = false,      -- unbind the details/changelog key
   },
 })
 ```
+
+Before 0.2.0 these keys lived under `keymaps.window`. That still works until 0.3.0, with a deprecation warning; when both are set, `window_keymaps` wins per action.
 
 | Action | Default | Description |
 | --- | --- | --- |

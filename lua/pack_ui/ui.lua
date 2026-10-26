@@ -230,7 +230,7 @@ local function close()
 end
 
 local function set_keymaps()
-  -- Keys come from config.keymaps.window so users can rebind them; desc feeds
+  -- Keys come from config.window_keymaps so users can rebind them; desc feeds
   -- which-key, so the in-window keys are documented the moment the float opens
   -- (which-key reads buffer-local maps).
   local win = config.window_keymaps()
