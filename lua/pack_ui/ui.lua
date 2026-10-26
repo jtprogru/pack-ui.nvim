@@ -113,7 +113,6 @@ local function apply(names)
 end
 
 -- Remove `names` via vim.pack
----@diagnostic disable-next-line: unused-function
 local function remove(names)
   if #names == 0 then
     vim.notify("vim.pack: nothing to remove", vim.log.levels.WARN)
@@ -175,7 +174,6 @@ local function update_all()
   apply(names)
 end
 
----@diagnostic disable-next-line: unused-local, unused-function
 local function remove_marked()
   local names = {}
   for _, p in ipairs(state.plugins) do
