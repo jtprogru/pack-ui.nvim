@@ -25,6 +25,11 @@ jobs:
         with:
           neovim: true
           version: ${{ matrix.neovim }}
+        env:
+          # On ubuntu-26.04 /tmp is a separate filesystem, so the action's
+          # rename from /tmp into $HOME fails with EXDEV. Keep its temp dir on
+          # the runner disk. https://github.com/rhysd/action-setup-vim/issues/80
+          TMPDIR: ${{ runner.temp }}
 
       - name: Checkout plenary.nvim
         uses: actions/checkout@v7
