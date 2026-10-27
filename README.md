@@ -10,27 +10,28 @@ One window shows the read-only state of every managed plugin and lets you apply 
 
 `vim.pack` ships two update flows: `vim.pack.update()` opens a review buffer in a separate tabpage, and `vim.pack.update(nil, { force = true })` updates everything with no review. This plugin puts both — plus a status overview — behind a single, mark-driven floating window.
 
-Update *detection* (which plugins have new commits, and the changelog) is computed with plain `git`, because `vim.pack` exposes no API for it without opening its tabpage buffer. Detection is display-only and best-effort; the actual apply always goes through `vim.pack.update(names, { force = true })`, which owns version resolution and the lockfile.
+Update _detection_ (which plugins have new commits, and the changelog) is computed with plain `git`, because `vim.pack` exposes no API for it without opening its tabpage buffer. Detection is display-only and best-effort; the actual apply always goes through `vim.pack.update(names, { force = true })`, which owns version resolution and the lockfile.
 
 ## Commands
 
-| Command | Behaviour |
-| --- | --- |
-| `:PackStatus` | Read-only overview, no network. Press `r` inside to check remotes. |
-| `:PackUpdate` | Opens the window and checks for updates; you apply what you mark. |
-| `:PackUpdateAll` | Opens the window, checks, and applies every available update. |
+| Command          | Behaviour                                                          |
+| ---------------- | ------------------------------------------------------------------ |
+| `:PackStatus`    | Read-only overview, no network. Press `r` inside to check remotes. |
+| `:PackUpdate`    | Opens the window and checks for updates; you apply what you mark.  |
+| `:PackUpdateAll` | Opens the window, checks, and applies every available update.      |
 
 ## Keymaps (inside the window)
 
-| Key | Action |
-| --- | --- |
-| `<Space>` / `<Tab>` | Toggle the mark on the current row |
-| `a` | Mark / unmark all |
-| `u` | Update marked rows (or the row under the cursor) |
-| `U` | Update all rows with available updates |
-| `r` | Re-check remotes |
-| `<CR>` / `K` | Show changelog / details for the plugin under the cursor |
-| `q` / `<Esc>` | Close |
+| Key                 | Action                                                   |
+| ------------------- | -------------------------------------------------------- |
+| `<Space>` / `<Tab>` | Toggle the mark on the current row                       |
+| `a`                 | Mark / unmark all                                        |
+| `u`                 | Update marked rows (or the row under the cursor)         |
+| `U`                 | Update all rows with available updates                   |
+| `d`                 | Remove marked rows (or the row under the cursor)         |
+| `r`                 | Re-check remotes                                         |
+| `<CR>` / `K`        | Show changelog / details for the plugin under the cursor |
+| `q` / `<Esc>`       | Close                                                    |
 
 Every in-window key is configurable via `window_keymaps` — see [Configuration](#configuration).
 
@@ -81,6 +82,7 @@ require("pack_ui").setup({
     mark_all = { "a" },
     update_marked = { "u" },
     update_all = { "U" },
+    remove_marked = { "d" },
     refresh = { "r", "R" },
     changelog = { "<CR>", "K" },
   },
