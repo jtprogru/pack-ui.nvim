@@ -112,33 +112,6 @@ local function apply(names)
   end)
 end
 
--- Remove `names` via vim.pack
-local function remove(names)
-  if #names == 0 then
-    vim.notify("vim.pack: nothing to remove", vim.log.levels.WARN)
-    return
-  end
-  vim.schedule(function()
-    local ok, err = pcall(vim.pack.del, names, { force = true })
-    if not ok then
-      vim.notify("vim.pack: " .. tostring(err), vim.log.levels.ERROR)
-    end
-    -- for _, p in ipairs(state.plugins) do
-    --   p.selected = false
-    -- end
-    -- Revs changed on disk; recompute from already-fetched refs (offline).
-    state.plugins = collect()
-    run_check(true)
-    vim.notify(
-      ("vim.pack: removed %d plugin%s — :restart to apply to current buffer"):format(
-        #names,
-        #names == 1 and "" or "s"
-      ),
-      vim.log.levels.INFO
-    )
-  end)
-end
-
 -- Update whatever is marked; fall back to the plugin under the cursor. Marking
 -- an already up-to-date plugin is allowed — vim.pack just re-checks it and
 -- no-ops if nothing changed.
@@ -174,20 +147,54 @@ local function update_all()
   apply(names)
 end
 
+-- Remove marked rows (or the row under the cursor) from disk. Only inactive
+-- plugins are removed: an active one is still in vim.pack.add() and would be
+-- reinstalled on the next start.
 local function remove_marked()
-  local names = {}
+  local targets = {}
   for _, p in ipairs(state.plugins) do
     if p.selected then
-      names[#names + 1] = p.name
+      targets[#targets + 1] = p
     end
+  end
+  if #targets == 0 then
+    targets[1] = current_plugin()
+  end
+  if #targets == 0 then
+    vim.notify("vim.pack: nothing to remove", vim.log.levels.WARN)
+    return
+  end
+
+  local names, skipped = {}, {}
+  for _, p in ipairs(targets) do
+    table.insert(p.active and skipped or names, p.name)
+  end
+  if #skipped > 0 then
+    vim.notify(
+      "vim.pack: still active, drop from vim.pack.add() and :restart first: " .. table.concat(skipped, ", "),
+      vim.log.levels.WARN
+    )
   end
   if #names == 0 then
-    local p = current_plugin()
-    if p then
-      names[1] = p.name
-    end
+    return
   end
-  remove(names)
+
+  local plural = #names == 1 and "" or "s"
+  local prompt = ("Remove %d plugin%s from disk?\n%s"):format(#names, plural, table.concat(names, ", "))
+  if vim.fn.confirm(prompt, "&Yes\n&No", 2) ~= 1 then
+    return
+  end
+
+  vim.schedule(function()
+    local ok, err = pcall(vim.pack.del, names)
+    state.plugins = collect()
+    run_check(true)
+    if not ok then
+      vim.notify("vim.pack: " .. tostring(err), vim.log.levels.ERROR)
+      return
+    end
+    vim.notify(("vim.pack: removed %d plugin%s"):format(#names, plural), vim.log.levels.INFO)
+  end)
 end
 
 local function toggle_mark()
