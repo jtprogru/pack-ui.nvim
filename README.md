@@ -10,7 +10,7 @@ One window shows the read-only state of every managed plugin and lets you apply 
 
 `vim.pack` ships two update flows: `vim.pack.update()` opens a review buffer in a separate tabpage, and `vim.pack.update(nil, { force = true })` updates everything with no review. This plugin puts both — plus a status overview — behind a single, mark-driven floating window.
 
-Update *detection* (which plugins have new commits, and the changelog) is computed with plain `git`, because `vim.pack` exposes no API for it without opening its tabpage buffer. Detection is display-only and best-effort; the actual apply always goes through `vim.pack.update(names, { force = true })`, which owns version resolution and the lockfile.
+Update _detection_ (which plugins have new commits, and the changelog) is computed with plain `git`, because `vim.pack` exposes no API for it without opening its tabpage buffer. Detection is display-only and best-effort; the actual apply always goes through `vim.pack.update(names, { force = true })`, which owns version resolution and the lockfile.
 
 ## Commands
 
@@ -28,6 +28,7 @@ Update *detection* (which plugins have new commits, and the changelog) is comput
 | `a` | Mark / unmark all |
 | `u` | Update marked rows (or the row under the cursor) |
 | `U` | Update all rows with available updates |
+| `d` | Remove marked rows (or the row under the cursor) |
 | `r` | Re-check remotes |
 | `<CR>` / `K` | Show changelog / details for the plugin under the cursor |
 | `q` / `<Esc>` | Close |
@@ -81,6 +82,7 @@ require("pack_ui").setup({
     mark_all = { "a" },
     update_marked = { "u" },
     update_all = { "U" },
+    remove_marked = { "d" },
     refresh = { "r", "R" },
     changelog = { "<CR>", "K" },
   },
@@ -100,7 +102,7 @@ The work is deferred off the startup critical path, and the fetch itself runs as
 
 ## Global keymaps & which-key
 
-Calling `setup()` registers the global keymaps above (nothing is mapped without it). Each carries a description, so if [which-key](https://github.com/folke/which-key.nvim) is installed they show up under a `pack-ui` group when you press the prefix — and the in-window keys (`<Space>`, `a`, `u`, `U`, `r`, `<CR>`, `K`, `q`) appear in which-key too, since they're documented buffer-local maps.
+Calling `setup()` registers the global keymaps above (nothing is mapped without it). Each carries a description, so if [which-key](https://github.com/folke/which-key.nvim) is installed they show up under a `pack-ui` group when you press the prefix — and the in-window keys (`<Space>`, `a`, `u`, `U`, `r`, `d`, `<CR>`, `K`, `q`) appear in which-key too, since they're documented buffer-local maps.
 
 There is deliberately no global keymap for `:PackUpdate`: marking rows only makes sense once the window is open, so `<leader>p` binds only `s` (status) and `U` (update all). Use `:PackUpdate` — or open with `<leader>ps` and mark rows there.
 
