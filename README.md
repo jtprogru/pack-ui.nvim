@@ -14,24 +14,24 @@ Update _detection_ (which plugins have new commits, and the changelog) is comput
 
 ## Commands
 
-| Command          | Behaviour                                                          |
-| ---------------- | ------------------------------------------------------------------ |
-| `:PackStatus`    | Read-only overview, no network. Press `r` inside to check remotes. |
-| `:PackUpdate`    | Opens the window and checks for updates; you apply what you mark.  |
-| `:PackUpdateAll` | Opens the window, checks, and applies every available update.      |
+| Command | Behaviour |
+| --- | --- |
+| `:PackStatus` | Read-only overview, no network. Press `r` inside to check remotes. |
+| `:PackUpdate` | Opens the window and checks for updates; you apply what you mark. |
+| `:PackUpdateAll` | Opens the window, checks, and applies every available update. |
 
 ## Keymaps (inside the window)
 
-| Key                 | Action                                                   |
-| ------------------- | -------------------------------------------------------- |
-| `<Space>` / `<Tab>` | Toggle the mark on the current row                       |
-| `a`                 | Mark / unmark all                                        |
-| `u`                 | Update marked rows (or the row under the cursor)         |
-| `U`                 | Update all rows with available updates                   |
-| `d`                 | Remove marked rows (or the row under the cursor)         |
-| `r`                 | Re-check remotes                                         |
-| `<CR>` / `K`        | Show changelog / details for the plugin under the cursor |
-| `q` / `<Esc>`       | Close                                                    |
+| Key | Action |
+| --- | --- |
+| `<Space>` / `<Tab>` | Toggle the mark on the current row |
+| `a` | Mark / unmark all |
+| `u` | Update marked rows (or the row under the cursor) |
+| `U` | Update all rows with available updates |
+| `d` | Remove marked rows (or the row under the cursor) |
+| `r` | Re-check remotes |
+| `<CR>` / `K` | Show changelog / details for the plugin under the cursor |
+| `q` / `<Esc>` | Close |
 
 Every in-window key is configurable via `window_keymaps` — see [Configuration](#configuration).
 
@@ -102,7 +102,7 @@ The work is deferred off the startup critical path, and the fetch itself runs as
 
 ## Global keymaps & which-key
 
-Calling `setup()` registers the global keymaps above (nothing is mapped without it). Each carries a description, so if [which-key](https://github.com/folke/which-key.nvim) is installed they show up under a `pack-ui` group when you press the prefix — and the in-window keys (`<Space>`, `a`, `u`, `U`, `r`, `<CR>`, `K`, `q`) appear in which-key too, since they're documented buffer-local maps.
+Calling `setup()` registers the global keymaps above (nothing is mapped without it). Each carries a description, so if [which-key](https://github.com/folke/which-key.nvim) is installed they show up under a `pack-ui` group when you press the prefix — and the in-window keys (`<Space>`, `a`, `u`, `U`, `r`, `d`, `<CR>`, `K`, `q`) appear in which-key too, since they're documented buffer-local maps.
 
 There is deliberately no global keymap for `:PackUpdate`: marking rows only makes sense once the window is open, so `<leader>p` binds only `s` (status) and `U` (update all). Use `:PackUpdate` — or open with `<leader>ps` and mark rows there.
 
