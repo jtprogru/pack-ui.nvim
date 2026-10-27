@@ -56,6 +56,7 @@ describe("config.setup", function()
     assert.same({ "u" }, opts.window_keymaps.update_marked)
     assert.same({ "U" }, opts.window_keymaps.update_all)
     assert.same({ "<CR>", "K" }, opts.window_keymaps.changelog)
+    assert.same({ "d" }, opts.window_keymaps.remove_marked)
     -- The window keys no longer live under `keymaps`.
     assert.is_nil(opts.keymaps.window)
   end)
