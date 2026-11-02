@@ -41,6 +41,7 @@ M.defaults = {
     mark_all = { "a" },
     update_marked = { "u" }, -- update marked rows (or the row under the cursor)
     update_all = { "U" },
+    remove_marked = { "d" }, -- remove marked rows (or the row under the cursor)
     refresh = { "r", "R" },
     changelog = { "<CR>", "K" }, -- details / changelog for the row under the cursor
   },

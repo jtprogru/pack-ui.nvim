@@ -25,6 +25,7 @@ require("pack_ui").setup({
     mark_all = { "a" },
     update_marked = { "u" },
     update_all = { "U" },
+    remove_marked = { "d" },
     refresh = { "r", "R" },
     changelog = { "<CR>", "K" },
   },
@@ -84,6 +85,7 @@ Before 0.2.0 these keys lived under `keymaps.window`. That still works until 0.3
 | `mark_all` | `{ "a" }` | Mark / unmark all rows. |
 | `update_marked` | `{ "u" }` | Update marked rows (or the row under the cursor). |
 | `update_all` | `{ "U" }` | Update all rows with available updates. |
+| `remove_marked` | `{ "d" }` | Remove marked rows (or the row under the cursor). |
 | `refresh` | `{ "r", "R" }` | Re-check remotes. |
 | `changelog` | `{ "<CR>", "K" }` | Show changelog / details for the plugin under the cursor. |
 

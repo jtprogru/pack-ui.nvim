@@ -16,6 +16,7 @@
 | `a` | Mark / unmark all |
 | `u` | Update marked rows (or the row under the cursor) |
 | `U` | Update all rows with available updates |
+| `d` | Remove marked rows (or the row under the cursor) |
 | `r` | Re-check remotes |
 | `<CR>` / `K` | Show changelog / details for the plugin under the cursor |
 | `q` / `<Esc>` | Close |
