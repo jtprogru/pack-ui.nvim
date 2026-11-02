@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-11-02
+
+### Added
+
+- Remove inactive plugins from the window with `d`: delete marked plugins, or the plugin under the cursor when nothing is marked. Configure or disable the binding with `window_keymaps.remove_marked`. Thanks to @nonepork (#2).
+- Every removal asks for confirmation, listing the plugin names and defaulting to "No". Active plugins are skipped with an explanation; deletion errors are reported without a success notification.
+
 ## [0.2.0] - 2026-10-26
 
 ### Changed
@@ -62,7 +69,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Updatable rows now show the update explicitly as `current → latest` — a semver tag for version-tracked plugins (e.g. `v0.9.0 → v1.0.0`), a short sha otherwise — alongside the new-commit count, and the whole row is rendered in bold so available updates stand out at a glance.
 - Dropped the global `<leader>pu` (`:PackUpdate`) keymap: marking rows only makes sense inside the window, so the prefix binds just `s` (status) and `U` (update all). `:PackUpdate` is unchanged.
 
-[Unreleased]: https://github.com/jtprogru/pack-ui.nvim/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/jtprogru/pack-ui.nvim/compare/v0.2.1...HEAD
+[0.2.1]: https://github.com/jtprogru/pack-ui.nvim/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/jtprogru/pack-ui.nvim/compare/v0.1.3...v0.2.0
 [0.1.3]: https://github.com/jtprogru/pack-ui.nvim/compare/v0.1.2...v0.1.3
 [0.1.2]: https://github.com/jtprogru/pack-ui.nvim/compare/v0.1.1...v0.1.2
